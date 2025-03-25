@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Academic Progression Search{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Academic Progression Search</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="regNo" class="form-label">Enter Registration Number</label>
+            <input type="text" class="form-control" name="regNo" id="regNo" placeholder="e.g., 23112013" required>
+        </div>
+        <button type="submit" class="btn btn-primary">View Academic Progression</button>
+    </form>
+</div>
+{% endblock %}

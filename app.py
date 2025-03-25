@@ -521,6 +521,37 @@ def leave_page():
 
     return jsonify({"message": "Leave application submitted successfully!"}), 200
 
+@app.route('/academic-progression-search/', methods=['GET', 'POST'])
+def academic_progression_search():
+    if request.method == 'POST':
+        regNo = request.form.get('regNo')
+        if regNo:
+            return redirect(url_for('academic_progression', regNo=regNo))
+    return render_template('academic_progression_search.html')
+
+
+@app.route('/academic-progression/<regNo>/')
+def academic_progression(regNo):
+    student = db.students.find_one({"regNo": regNo})
+    if not student:
+        return "Student not found", 404
+
+    marks = student.get("marks", [])
+    progression = {}
+    for entry in marks:
+        subject = entry.get("subject")
+        mark_val = entry.get("marks")
+        if subject:
+            progression[subject] = mark_val
+
+    if progression:
+        total_marks = sum(progression.values())
+        num_subjects = len(progression)
+        percentage = (total_marks / (num_subjects * 100)) * 100
+    else:
+        percentage = 0
+
+    return render_template("academic_progression.html", student=student, progression=progression, percentage=percentage)
 
 
 if __name__ == '__main__':
